@@ -1,4 +1,4 @@
-const AsciiCollection = [
+const asciiCollection = [
     {
         id: 'first',
         name: 'firs-ascii',
@@ -44,4 +44,4 @@ const AsciiCollection = [
     }
 ]
 
-export default AsciiCollection
+export default asciiCollection
