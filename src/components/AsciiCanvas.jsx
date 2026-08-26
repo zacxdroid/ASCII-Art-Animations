@@ -152,9 +152,10 @@ const AsciiCanvas = () => {
     }, {scope: canvasRef})
 
     return (
-        <div className="relative w-full max-w-6xl flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
-            <div ref={borderRef} className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 bg-[conic-gradient(from_0deg,transparent_15%,rgba(200,255,255,0.2)_100%)] z-0"/>
-            <div className="absolute inset-[2px] bg-[#0e0606]/95 rounded-2xl z-0 backdrop-blur-md"/>
+        <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
+            <div ref={borderRef} className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 bg-[conic-gradient(from_0deg,transparent_15%,rgba(200,255,255,0.2)_100%)] z-0"/>            
+            <div className="absolute inset-[2px] bg-[#161212]/95 rounded-2xl z-0 backdrop-blur-md"/>
+            <div className="absolute inset-[10px] bg-[#0e0606]/95 rounded-xl z-0 backdrop-blur-md"/>
             <canvas ref={canvasRef} className="block pointer-events-none relative z-10" />
         </div>
     )
