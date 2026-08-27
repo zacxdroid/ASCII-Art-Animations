@@ -1,7 +1,7 @@
 import './App.css'
 import AsciiCanvas from './components/AsciiCanvas'
+import Footer from './components/Footer'
 
-import iconImport from './assets/images/icon-import.png'
 import patternLeft from './assets/images/pattern-left.png'
 import patternRight from './assets/images/pattern-right.png'
 
@@ -15,8 +15,8 @@ function App() {
 
     <section className='relative w-full min-h-screen px-4 sm:px-8 md:px-12 flex justify-center items-center overflow-hidden flex-col'>
       
-      <img src={patternLeft} className='absolute top-0 left-0 h-full max-w-[48%] object-cover object-left opacity-6 z-0 pointer-events-none mix-blend-plus-lighter'/>
-      <img src={patternRight} className="absolute top-0 right-0 h-full max-w-[48%] object-cover object-right opacity-6 z-0 pointer-events-none mix-blend-plus-lighter"/>
+      <img src={patternLeft} className='absolute top-0 left-0 h-full max-w-[48%] object-cover object-left opacity-6 -z-10 pointer-events-none mix-blend-plus-lighter'/>
+      <img src={patternRight} className="absolute top-0 right-0 h-full max-w-[48%] object-cover object-right opacity-6 -z-10 pointer-events-none mix-blend-plus-lighter"/>
       <div className="absolute inset-0 -z-20 pointer-events-none opacity-25 mix-blend-plus-darker bg-repeat-x bg-right-top bg-[length:auto_100%]"
         style={{ backgroundImage: `url(${bg1})` }} />
       <div className="absolute inset-0 -z-10 pointer-events-none opacity-4 mix-blend-plus-darker bg-repeat-x bg-right-top bg-[length:auto_100%]"
@@ -35,15 +35,8 @@ function App() {
         <AsciiCanvas/>
       </main>
 
-      <footer className='w-full max-w-4xl grid grid-cols-[1fr_3fr] mt-1.5'>
-          <div className='border border-black flex justify-center'>
-            <img src={iconImport} className='object-contain cursor-pointer'/>
-          </div>
+      <Footer/>
 
-          <div className='border border-black'>
-            
-          </div>
-      </footer>
     </section>
 
 

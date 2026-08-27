@@ -1,52 +1,15 @@
 import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
-const asciiArt = `                                 ▄▄▄▄▄▄▄▄▄▄
-                          ▄▄▄████████▓▓▓▓▓▓████▄▄▄
-                          █▓█▓▓█▓▓▓▓▓▓▒▒▒▒▒▓▓▓▓▓▓█
-                           ███▓▓▓▒▒▒▒░░░░░░▒▒▒▒▓█
-                           ██▓▓▒▒▒░░░      ░░▒▓▓█
-                            ██▓▒▒░░         ░▒▓█
-                            ██▓▓▒░░        ░▒▓▓█
-                             ██▓▒░░        ░▒▓█
-                             ██▓▓▒░░      ░▒▓▓█
-                              ██▓▒░░░░░░░░░▒▓█
-                              ██▓▓▒▒▒▒▒▒▒░▒▓▓█
-                               ██▓▒▓▓▓▓▓▓▒▒▓█
-                               ██▓▓▓████▓▓▓▓█
-                                ████▀▀▀▀██▓█
-                                █▀        ▀█
-                                  ▄▄████▄▄
-                                 ██▒░  ▀▀██
-                                █▓▓▒░    ▀██
-                                █▓▒▒░░    ██
-                           ▄▄██  █▓▒▒▒░░░██  ██▄▄
-                       ▄▄██░  ▀█  ▀▀████▀▀  █░  ▀▀█▄▄
-                   ▄▄████▒▒░░  ▀█▄▄      ▄▄▓▒░░░    ▀▀█▄▄
-               ▄▄█████▓▓▓▓▒▒░░    ██▀  ▀██▓▓▓▒▒░░░░░    ▀▀█▄▄
-            ▄███████▓▓▓▓▓▓▒▓▒▒░░░░█      ████▓▓▒▒▒▒░░░░░    ▀▀█▄▄
-            ▀▀▀▀▀▀██████▓▀▀▀▀▀▀▀▀▒        █▀▀▀▀▀▀▀▀▓▒▒▒░░░▄▄▄█▀▀▀
-         ▄▄▄█████▄▄ ▀██ ▄▄██████▄▄        ▄▄██████▄▄ █▓▒█▀▀ ▄▄▄█████▄▄
-      ▄▓██████████▓░ █ ▄█▀▀████▄█▀██▄▄▄▄██▀█▄████▀▀█▄ █▀ ▄███████████▓░
-     ░▓██████████▓░ ▄▀ █   ░██████ ▀████▀ ██████░   █ ▀ ████████████▓░
-    ░▓██████████▓░  ▄▄███▄▄ ██████░ ▀█▓▀ ░█████▓   ▀   ██████▓▓▓▓▓█▓░
-   ░▓████▓▀▀▀▀▓▓░    ▀███▀  ▓█████▓  ▓▒  ▓████▓▓      █████▓▓▀▀▀▀▓▓░
-   ░▓███▓      ▀     █▀ ▀█  ░██████  ▒░  █████▓░      ████▓▓      ▀
-    ░▓██▓           ▀     ▀  █████▓  ░   ▓████▓        ███▓▓
-     ░▓██▓▄▄  ▄▄▓▓█▄▄       ░█████░      ░████▓░        ███▓▓▄▄  ▄▄▓▓█▄▄
-      ▀▓████▓▓▓▓▀▀  ▀▀▀ ▄   ▓████▓        ▓████▓         ▀██████▓▓▓▀▀  ▀█
-         ▀▓▓▓▀▀          ▄▄████▀▀          ▀▀████▄▄         ▀█▓▓▀▀   ▄▄██▓▄▄
-               ▄▄▄▄██████▀▀▀                    ▀▀▀██████▄▄▄▄         ▀█▓▓▀
-         ▄▄█████▀▀▀▀      – Chemical Music Crew –       ▀▀▀▀█████▄▄   ▓▀ ▀▓
-      ▄██▀▀▀                                                    ▀▀▀█░▀ `
-
+import ASCII_PRESETS from "../ascii/asciiPresets"
 
 const AsciiCanvas = () => {
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const borderRef = useRef(null)
     const canvasRef = useRef(null)
 
-    // Title 
+    // Border 
     useGSAP(() => {
         const border = borderRef.current
         if (!border) return
@@ -65,12 +28,14 @@ const AsciiCanvas = () => {
         const ctx = canvas.getContext('2d')
         if(!ctx) return
 
+        const currentArt = ASCII_PRESETS[selectedIndex].art 
+
         const fontSize = 14
         ctx.font = `${fontSize}px monospace`
         ctx.textBaseline = 'middle'
         ctx.textAlign = 'center'
 
-        const asciiLines = asciiArt.split('\n')
+        const asciiLines = currentArt.split('\n')
         const charWidth = ctx.measureText('M').width
         const lineHeight = fontSize * 1.2
 
@@ -103,7 +68,7 @@ const AsciiCanvas = () => {
                         originY, 
                         scale: 1,
                         color: '#bbbbbb',
-                        opaciy: 1
+                        opacity: 1
                     })
                 }
             }
@@ -149,7 +114,7 @@ const AsciiCanvas = () => {
             gsap.ticker.remove(render)
             gsap.killTweensOf(particles)
         }
-    }, {scope: canvasRef})
+    }, {scope: canvasRef, dependencies: [selectedIndex]})
 
     return (
         <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
@@ -157,6 +122,18 @@ const AsciiCanvas = () => {
             <div className="absolute inset-[2px] bg-[#161212]/95 rounded-2xl z-0 backdrop-blur-md"/>
             <div className="absolute inset-[10px] bg-[#0e0606]/95 rounded-xl z-0 backdrop-blur-md"/>
             <canvas ref={canvasRef} className="block pointer-events-none relative z-10" />
+
+            <section className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20">
+                {ASCII_PRESETS.map((preset, index) => (
+                    <button key={preset.id} onClick={() => setSelectedIndex(index)}
+                    className={`px-2 py-1 text-[10px] font-mono tracking-wider rounded border transition-all duration-500 select-none
+                    ${selectedIndex === index ? 'bg-white/15 text-white border-white/40'
+                        : 'bg-[#121212]/60 text-[#777777] border-white/5 hover:bg-white/10 hover:text-white'
+                    }`}>
+                        {preset.name}
+                    </button>
+                ))}
+            </section>
         </div>
     )
 }
