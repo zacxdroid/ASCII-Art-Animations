@@ -3,17 +3,17 @@ import PresetOption from './PresetOption'
 import iconImport from '../assets/images/icon-import.png'
 
 const PRESETS = [
-  { id: 'matrix', label: 'Matrix'},
+  { id: 'quart', label: 'quart'},
   { id: 'dna', label: 'DNA  Helix'},
   { id: 'sonar', label: 'Sonar'},
 ]
 
-const Footer = ({ onSelectPreset, onUploadTxt, onUploadScript}) => {
+const Footer = ({ onSelectEffect, onUploadTxt, onUploadScript}) => {
   const [activePreset, setActivePreset] = useState(PRESETS[0].id)
 
   const handlePresetClick = (id) => {
     setActivePreset(id)
-    if (onSelectPreset) onSelectPreset(id)
+    if (onSelectEffect) onSelectEffect(id)
   } 
 
   const handleTxtChange = (e) => {

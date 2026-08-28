@@ -1,16 +1,23 @@
 import './App.css'
+import { useState } from 'react'
+
 import AsciiCanvas from './components/AsciiCanvas'
 import Footer from './components/Footer'
 
 import patternLeft from './assets/images/pattern-left.png'
 import patternRight from './assets/images/pattern-right.png'
-
 import bg1 from './assets/images/bg1.jpg'
 import bg2 from './assets/images/bg2.jpg'
 
+import { EFFECT_CONFIGS } from './constants/effects'
 
 function App() {
+  const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS.quart)
 
+  const handleSelectEffect = (effectId) => {
+    const selected = EFFECT_CONFIGS[effectId] || { id: effectId, color: '#72d07'}
+    setCurrentEffect(selected)
+  }
   return (
 
     <section className='relative w-full min-h-screen px-4 sm:px-8 md:px-12 flex justify-center items-center overflow-hidden flex-col'>
@@ -32,10 +39,10 @@ function App() {
       </header>
 
       <main className='w-full max-w-4xl'>
-        <AsciiCanvas/>
+        <AsciiCanvas effect={currentEffect}/>
       </main>
 
-      <Footer/>
+      <Footer onSelectEffect={handleSelectEffect}/>
 
     </section>
 

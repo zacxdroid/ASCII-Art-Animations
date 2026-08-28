@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 
 import ASCII_PRESETS from "../ascii/asciiPresets"
 
-const AsciiCanvas = () => {
+const AsciiCanvas = ({ effect = { id:'quart', color:'#72d07c'} }) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const borderRef = useRef(null)
     const canvasRef = useRef(null)
@@ -82,18 +82,36 @@ const AsciiCanvas = () => {
             const dist = Math.sqrt(dx * dx + dy * dy)
             const angle = Math.atan2(dy, dx)
 
-            const delay = (Math.abs(dx) * Math.abs(dy)) * 0.00008
-            gsap.to(p, {
-                x: p.originX + (dx > 0 ? 10 : -10),
-                y: p.originY + (dy > 0 ? 10 : -10),
-                scale: 1,
-                color: '#72d07c',
-                duration: 1,
-                repeat: -1,
-                yoyo: true,
-                ease: "back.inOut(1.5)",
-                delay: delay
-            })
+            switch(effect.id) {
+                case 'quart': 
+                    gsap.to(p, {
+                        x: p.originX + (dx > 0 ? 10 : -10),
+                        y: p.originY + (dy > 0 ? 10 : -10),
+                        scale: 1,
+                        color: effect.color,
+                        duration: 1,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "back.inOut(1.5)",
+                        delay: (Math.abs(dx) * Math.abs(dy)) * 0.00008
+                    })
+                    break
+                case 'dna':
+                    gsap.to(p, {
+                        x: p.originX + Math.sin(p.originY * 0.05) * 20,
+                        scale: () => 1 + Math.cos(p.originY * 0.05) * 0.5,
+                        color: effect.color,
+                        opacity: () => 0.5 + Math.cos(p.originY * 0.05) * 0.5,
+                        duration: 2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: p.originX * 0.01
+                    })
+                    break
+                default:
+                    break
+            }
         })
 
         const render = () => {
@@ -114,7 +132,7 @@ const AsciiCanvas = () => {
             gsap.ticker.remove(render)
             gsap.killTweensOf(particles)
         }
-    }, {scope: canvasRef, dependencies: [selectedIndex]})
+    }, {scope: canvasRef, dependencies: [selectedIndex, effect]})
 
     return (
         <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
