@@ -109,6 +109,17 @@ const AsciiCanvas = ({ effect = { id:'quart', color:'#72d07c'} }) => {
                         delay: p.originX * 0.01
                     })
                     break
+                case 'sonar': 
+                    gsap.to(p, {
+                        opacity: [0.2, 1, 0.2],
+                        scale: [0.8, 1.4, 0.8],
+                        color: effect.color,
+                        duration: 1.5,
+                        repeat: -1,
+                        ease: "sine.inOut",
+                        delay: dist * 0.006
+                    })
+                    break
                 default:
                     break
             }
