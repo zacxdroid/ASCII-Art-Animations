@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 
 import ASCII_PRESETS from "../ascii/asciiPresets"
 
-const AsciiCanvas = ({ effect = { id:'quart', color:'#72d07c'} }) => {
+const AsciiCanvas = ({ effect  }) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const borderRef = useRef(null)
     const canvasRef = useRef(null)

@@ -1,6 +1,6 @@
-export const EFFECT_CONFIGS = {
-    quart: { id: 'quart', color: '#72d07c' },
-    dna: { id: 'dna', color: '#38bdf8' },
-    sonar: { id: 'sonar', color: '#f43f5e' },
+export const EFFECT_CONFIGS = [
+    { id: 'quart', color: '#72d07c', label: 'quart' },
+    { id: 'dna', color: '#38bdf8', label: 'dna' },
+    { id: 'sonar', color: '#f43f5e', label: 'sonar'},
 
-}
+]

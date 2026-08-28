@@ -2,14 +2,10 @@ import { useState } from 'react'
 import PresetOption from './PresetOption'
 import iconImport from '../assets/images/icon-import.png'
 
-const PRESETS = [
-  { id: 'quart', label: 'quart'},
-  { id: 'dna', label: 'DNA  Helix'},
-  { id: 'sonar', label: 'Sonar'},
-]
+import { EFFECT_CONFIGS } from '../constants/effects'
 
 const Footer = ({ onSelectEffect, onUploadTxt, onUploadScript}) => {
-  const [activePreset, setActivePreset] = useState(PRESETS[0].id)
+  const [activePreset, setActivePreset] = useState(EFFECT_CONFIGS[0].id)
 
   const handlePresetClick = (id) => {
     setActivePreset(id)
@@ -43,7 +39,7 @@ const Footer = ({ onSelectEffect, onUploadTxt, onUploadScript}) => {
       </section>
 
       <section className='flex items-center overflow-x-auto p-2 gap-2 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-transparent'>
-        {PRESETS.map((preset) => (
+        {EFFECT_CONFIGS.map((preset) => (
           <PresetOption key={preset.id} label={preset.label} isActive={activePreset === preset.id} onClick={() => handlePresetClick(preset.id)}/>
         ))}
       </section>

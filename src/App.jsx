@@ -12,10 +12,10 @@ import bg2 from './assets/images/bg2.jpg'
 import { EFFECT_CONFIGS } from './constants/effects'
 
 function App() {
-  const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS.quart)
+  const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS[0])
 
   const handleSelectEffect = (effectId) => {
-    const selected = EFFECT_CONFIGS[effectId] || { id: effectId, color: '#72d07'}
+    const selected = EFFECT_CONFIGS.find((effect) => effect.id === effectId) || { id: effectId, color: '#72d07'}
     setCurrentEffect(selected)
   }
   return (
