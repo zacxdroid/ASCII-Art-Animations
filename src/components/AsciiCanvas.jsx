@@ -98,26 +98,212 @@ const AsciiCanvas = ({ effect  }) => {
                     break
                 case 'dna':
                     gsap.to(p, {
-                        x: p.originX + Math.sin(p.originY * 0.05) * 20,
+                        x: p.originX + Math.sin(p.originY * 0.05) * 40,
                         scale: () => 1 + Math.cos(p.originY * 0.05) * 0.5,
                         color: effect.color,
                         opacity: () => 0.5 + Math.cos(p.originY * 0.05) * 0.5,
-                        duration: 2,
+                        duration: 1,
                         repeat: -1,
                         yoyo: true,
                         ease: "sine.inOut",
                         delay: p.originX * 0.01
                     })
                     break
-                case 'sonar': 
+                case 'sonar': {
+                    p.opacity = 0.1
+                    const normalizedAngle = (angle + Math.PI) / (Math.PI * 2)
                     gsap.to(p, {
-                        opacity: [0.2, 1, 0.2],
-                        scale: [0.8, 1.4, 0.8],
+                        scale: 2,
+                        opacity: 1,
+                        color: effect.color,
+                        duration: 0.4,
+                        repeat: -1,
+                        ease: "power2.out",
+                        delay: normalizedAngle * 2.5
+                    })
+                    break
+                }
+                case 'vortex':
+                    gsap.to(p, {
+                        x: p.originX + Math.cos(angle + Math.PI / 2) * 20,
+                        y: p.originY + Math.sin(angle + Math.PI / 2) * 20,
+                        scale: 1.3,
                         color: effect.color,
                         duration: 1.5,
                         repeat: -1,
+                        yoyo: true,
                         ease: "sine.inOut",
+                        delay: dist * 0.005
+                    })
+                    break
+                case 'shatter': {
+                    const maxDist = Math.max(cx, cy)
+                    const normalizedDist = dist / maxDist
+                    gsap.to(p, {
+                        x: p.originX + dx * 0.6,
+                        y: p.originY + dy * 0.6,
+                        scale: 0.1,
+                        opacity: 0,
+                        color: effect.color,
+                        duration: 1.5,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "expo.inOut",
+                        delay: normalizedDist * 1.5
+                    })
+                    break
+                }
+                case 'scanline':
+                    p.opacity = 0.2
+                    gsap.to(p, {
+                        scale: 1.8,
+                        opacity: 1,
+                        color: effect.color,
+                        duration: 0.8,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: p.originY * 0.015
+                    })
+                    break
+                case 'ripple':
+                    gsap.to(p, {
+                        y: p.originY - 12,
+                        scale: 1.5,
+                        color: effect.color,
+                        duration: 1.2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "power1.inOut",
+                        delay: dist * 0.01
+                    })
+                    break
+                case 'fireflies':
+                    gsap.to(p, {
+                        x: () => p.originX + (Math.random() - 0.5) * 30,
+                        y: () => p.originY + (Math.random() - 0.5) * 30,
+                        scale: () => Math.random() * 1.5 + 0.5,
+                        color: effect.color,
+                        opacity: () => Math.random(),
+                        duration: () => Math.random() * 2 + 1.5,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: () => Math.random() * 2
+                    })
+                    break
+                case 'chem':
+                    gsap.to(p, {
+                        x: () => p.originX + (Math.random() - 0.5) * 30,
+                        y: () => p.originY + (Math.random() - 0.5) * 30,
+                        scale: () => Math.random() * 1.5 + 0.5,
+                        color: effect.color,
+                        opacity: () => Math.random(),
+                        duration: () => Math.random() * 2 + 1.5,
+                        repeat: -1,
+                    })
+                    break
+                case 'cyberstorm':
+                    gsap.to(p, {
+                        x: p.originX + (Math.random() > 0.5 ? 10 : -10),
+                        opacity: 0.1,
+                        color: effect.color,
+                        duration: 0.4,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "power3.inOut",
+                        delay: Math.random() * 0.8
+                    })
+                    break
+                case 'heartbeat':
+                    gsap.to(p, {
+                        scale: 1.8,
+                        color: effect.color,
+                        duration: 0.4,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "back.out(2)",
+                        delay: dist * 0.003
+                    })
+                    break
+                case 'blackhole':
+                    gsap.to(p, {
+                        x: cx,
+                        y: cy,
+                        scale: 0.1,
+                        opacity: 0,
+                        color: effect.color,
+                        duration: 2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "power4.in",
                         delay: dist * 0.006
+                    })
+                    break
+                case 'driving':
+                    p.opacity = 0.1
+                    gsap.to(p, {
+                        opacity: 1,
+                        scale: 1.2,
+                        color: effect.color,
+                        duration: 0.2,
+                        repeat: -1,
+                        yoyo: true,
+                        repeatDelay: 0.3, 
+                        ease: "none",
+                        delay: (p.originX * 0.003) + (p.originY * 0.01)
+                    })
+                    break
+                case 'magneto':
+                    gsap.to(p, {
+                        x: p.originX + (dx > 0 ? 25 : -25),
+                        y: p.originY + (dy > 0 ? 15 : -15),
+                        opacity: 0.4,
+                        color: effect.color,
+                        duration: 1.2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "power2.inOut",
+                        delay: Math.abs(dy) * 0.008
+                    })
+                    break
+                case '3d?4d?':
+                    gsap.to(p, {
+                        y: p.originY + Math.sin(p.originX * 0.015) * 35,
+                        x: cx,
+                        scale: 1.3,
+                        color: effect.color,
+                        duration: 2.5,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: p.originX * 0.004
+                    })
+                    break
+                case 'hypnotic':
+                    gsap.to(p, {
+                        scale: 1.6,
+                        opacity: 0.3,
+                        color: effect.color,
+                        duration: 1.2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: Math.sin(dist * 0.04) * 0.8 
+                    })
+                    break
+                case 'meteor':
+                    p.opacity = 0
+                    gsap.to(p, {
+                        x: p.originX - 40,
+                        y: p.originY + 40,
+                        opacity: 1,
+                        scale: 1.5,
+                        color: effect.color,
+                        duration: 0.6,
+                        repeat: -1,
+                        ease: "power1.in",
+                        delay: Math.random() * 4 + (p.originX + p.originY) * 0.001
                     })
                     break
                 default:
