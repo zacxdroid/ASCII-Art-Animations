@@ -11,12 +11,17 @@ const AsciiCanvas = ({ effect, custom }) => {
     const borderRef = useRef(null)
     const canvasRef = useRef(null)
 
+    const effectId = effect?.id
+    const effectColor = effect?.color
+    const customArt = custom?.art
+    const customName = custom?.name
+
     // User set a custom Ascii
     useEffect(() => {
         if (custom) {
             setIsCustomMode(true)
         }
-    }, [custom])
+    }, [customArt])
 
     // Border 
     useGSAP(() => {
@@ -29,7 +34,7 @@ const AsciiCanvas = ({ effect, custom }) => {
             repeat: -1,
             ease: 'none'
         })
-    }, {scope: borderRef})
+    }, {scope: borderRef, dependencies: []})
 
     // Ascii Animations
     useGSAP(() => {
@@ -85,21 +90,19 @@ const AsciiCanvas = ({ effect, custom }) => {
             }
         })
 
-        gsap.killTweensOf(particles)
-
         particles.forEach((p) => {
             const dx = p.originX - cx
             const dy = p.originY - cy
             const dist = Math.sqrt(dx * dx + dy * dy)
             const angle = Math.atan2(dy, dx)
 
-            switch(effect.id) {
+            switch(effectId) {
                 case 'quart': 
                     gsap.to(p, {
                         x: p.originX + (dx > 0 ? 10 : -10),
                         y: p.originY + (dy > 0 ? 10 : -10),
                         scale: 1,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1,
                         repeat: -1,
                         yoyo: true,
@@ -111,7 +114,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         x: p.originX + Math.sin(p.originY * 0.05) * 40,
                         scale: () => 1 + Math.cos(p.originY * 0.05) * 0.5,
-                        color: effect.color,
+                        color: effectColor,
                         opacity: () => 0.5 + Math.cos(p.originY * 0.05) * 0.5,
                         duration: 1,
                         repeat: -1,
@@ -126,7 +129,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         scale: 2,
                         opacity: 1,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.4,
                         repeat: -1,
                         ease: "power2.out",
@@ -139,7 +142,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         x: p.originX + Math.cos(angle + Math.PI / 2) * 20,
                         y: p.originY + Math.sin(angle + Math.PI / 2) * 20,
                         scale: 1.3,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1.5,
                         repeat: -1,
                         yoyo: true,
@@ -155,7 +158,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         y: p.originY + dy * 0.6,
                         scale: 0.1,
                         opacity: 0,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1.5,
                         repeat: -1,
                         yoyo: true,
@@ -169,7 +172,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         scale: 1.8,
                         opacity: 1,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.8,
                         repeat: -1,
                         yoyo: true,
@@ -181,7 +184,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         y: p.originY - 12,
                         scale: 1.5,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -194,7 +197,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         x: () => p.originX + (Math.random() - 0.5) * 30,
                         y: () => p.originY + (Math.random() - 0.5) * 30,
                         scale: () => Math.random() * 1.5 + 0.5,
-                        color: effect.color,
+                        color: effectColor,
                         opacity: () => Math.random(),
                         duration: () => Math.random() * 2 + 1.5,
                         repeat: -1,
@@ -208,7 +211,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         x: () => p.originX + (Math.random() - 0.5) * 30,
                         y: () => p.originY + (Math.random() - 0.5) * 30,
                         scale: () => Math.random() * 1.5 + 0.5,
-                        color: effect.color,
+                        color: effectColor,
                         opacity: () => Math.random(),
                         duration: () => Math.random() * 2 + 1.5,
                         repeat: -1,
@@ -218,7 +221,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         x: p.originX + (Math.random() > 0.5 ? 10 : -10),
                         opacity: 0.1,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.4,
                         repeat: -1,
                         yoyo: true,
@@ -229,7 +232,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                 case 'heartbeat':
                     gsap.to(p, {
                         scale: 1.8,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.4,
                         repeat: -1,
                         yoyo: true,
@@ -243,7 +246,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         y: cy,
                         scale: 0.1,
                         opacity: 0,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 2,
                         repeat: -1,
                         yoyo: true,
@@ -256,7 +259,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         opacity: 1,
                         scale: 1.2,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.2,
                         repeat: -1,
                         yoyo: true,
@@ -270,7 +273,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         x: p.originX + (dx > 0 ? 25 : -25),
                         y: p.originY + (dy > 0 ? 15 : -15),
                         opacity: 0.4,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -283,7 +286,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         y: p.originY + Math.sin(p.originX * 0.015) * 35,
                         x: cx,
                         scale: 1.3,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 2.5,
                         repeat: -1,
                         yoyo: true,
@@ -295,7 +298,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                     gsap.to(p, {
                         scale: 1.6,
                         opacity: 0.3,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -310,7 +313,7 @@ const AsciiCanvas = ({ effect, custom }) => {
                         y: p.originY + 40,
                         opacity: 1,
                         scale: 1.5,
-                        color: effect.color,
+                        color: effectColor,
                         duration: 0.6,
                         repeat: -1,
                         ease: "power1.in",
@@ -324,23 +327,27 @@ const AsciiCanvas = ({ effect, custom }) => {
 
         const render = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
+
             particles.forEach((p) => {
-                ctx.save()
-                ctx.translate(p.x, p.y)
-                ctx.scale(p.scale, p.scale)
                 ctx.globalAlpha = p.opacity
                 ctx.fillStyle = p.color
-                ctx.fillText(p.char, 0, 0)
-                ctx.restore()
+
+                if (p.scale !== 1 ) {
+                    ctx.translate(p.x, p.y)
+                    ctx.scale(p.scale, p.scale)
+                    ctx.fillText(p.char, 0, 0)
+                    ctx.setTransform(1, 0, 0 , 1, 0, 0)
+                } else {
+                    ctx.fillText(p.char, p.x, p.y)
+                }
             })
         }
         gsap.ticker.add(render)
 
         return () => {
             gsap.ticker.remove(render)
-            gsap.killTweensOf(particles)
         }
-    }, {scope: canvasRef, dependencies: [selectedIndex, effect, custom, isCustomMode ]})
+    }, {scope: canvasRef, dependencies: [selectedIndex, effectId, effectColor, customArt, isCustomMode ]})
 
     return (
         <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
@@ -350,9 +357,9 @@ const AsciiCanvas = ({ effect, custom }) => {
             <canvas ref={canvasRef} className="block pointer-events-none relative z-10" />
 
             <section className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20">
-                {custom && isCustomMode && (
+                {customArt && isCustomMode && (
                     <button className="px-2 py-1 text-[10px] font-mono tracking-wider rounded border transition-all duration-500 select-none bg-white/15 text-white border-white/40 mb-2">
-                        {custom.name}
+                        {customName}
                     </button>
                 )}
                 {ASCII_PRESETS.map((preset, index) => (
