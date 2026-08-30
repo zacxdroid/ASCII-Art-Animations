@@ -41,7 +41,19 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
             if (onRecordingStart) onRecordingStart()
             
             const stream = canvas.captureStream(60)
-            const recorder = new  MediaRecorder(stream, {mimeType: 'video/webm'})
+
+            //High Quality video: 50Mbps
+            let options = {
+                mimeType: 'video/webm;codecs=vp9',
+                videoBitsPerSecond: 50000000
+            }
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options = {
+                    mimeType: 'video/webm;codecs=vp8',
+                    videoBitsPerSecond: 50000000
+                }
+            }
+            const recorder = new  MediaRecorder(stream, options)
             const chunks = []
 
             recorder.ondataavailable = (e) => {
