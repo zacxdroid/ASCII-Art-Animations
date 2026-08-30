@@ -1,5 +1,5 @@
 import './App.css'
-import { use, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import AsciiCanvas from './components/AsciiCanvas'
 import Footer from './components/Footer'
@@ -14,6 +14,10 @@ import { EFFECT_CONFIGS } from './constants/effects'
 function App() {
   const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS[0])
   const [customAscii, setCustomAscii] = useState(null)
+
+  const canvasRef = useRef(null)
+  const [isRecording, setIsRecording] = useState(false)
+
 
   const handleSelectEffect = (effectId) => {
     const selected = EFFECT_CONFIGS.find((effect) => effect.id === effectId) || { id: effectId, color: '#72d07'}
@@ -35,6 +39,14 @@ function App() {
     }
   }
   
+  const handleExportPNG = () => {
+    canvasRef.current?.exportPNG()
+  }
+
+  const handleExportWebM = (duration) => {
+    canvasRef.current?.exportWebM(duration)
+  }
+
   return (
 
     <section className='relative w-full min-h-screen px-4 sm:px-8 md:px-12 flex justify-center items-center overflow-hidden flex-col'>
@@ -47,19 +59,38 @@ function App() {
         style={{ backgroundImage: `url(${bg2})` }} />
 
       <header className='flex w-full max-w-4xl flex-row items-center justify-between text-white px-6 py-4'>
-        <h1 className="text-white/80 text-sm font-medium uppercase tracking-widest">
-          ZACXDROID
-        </h1>
+        <div className='flex items-center gap-4'>
+          <h1 className="text-white/80 text-sm font-medium uppercase tracking-widest">
+            ZACXDROID
+          </h1>
+          {isRecording && (
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/40">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-[9px] font-mono text-red-500 uppercase tracking-widest">REC</span>
+            </div>
+          )}
+        </div>
+
         <h1 className="text-6xl font-bold leading-none tracking-tighter">
           ASCII
         </h1>
       </header>
 
       <main className='w-full max-w-4xl'>
-        <AsciiCanvas effect={currentEffect} custom={customAscii}/>
+        <AsciiCanvas 
+          effect={currentEffect} 
+          custom={customAscii}
+          ref={canvasRef}
+          onRecordingStart = {() => setIsRecording(true)}
+          onRecordingEnd = {() => setIsRecording(false)}/>
       </main>
 
-      <Footer onSelectEffect={handleSelectEffect} onUploadTxt={handleSelectTxt}/>
+      <Footer 
+        onSelectEffect={handleSelectEffect} 
+        onUploadTxt={handleSelectTxt}
+        onExportPNG = {handleExportPNG}
+        onExportWebM = {handleExportWebM}
+        isRecording ={isRecording}/>
 
     </section>
 

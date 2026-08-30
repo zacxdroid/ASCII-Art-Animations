@@ -1,10 +1,10 @@
 import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react"
 
 import ASCII_PRESETS from "../ascii/asciiPresets"
 
-const AsciiCanvas = ({ effect, custom }) => {
+const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecordingEnd }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [isCustomMode, setIsCustomMode] = useState(false)
 
@@ -22,6 +22,49 @@ const AsciiCanvas = ({ effect, custom }) => {
             setIsCustomMode(true)
         }
     }, [customArt])
+
+    // Expose the export functions to the parent component
+    useImperativeHandle(ref, () => ({
+        exportPNG: () => {
+            const canvas = canvasRef.current
+            if (!canvas) return
+            const dataUrl = canvas.toDataURL('image/png')
+            const link = document.createElement('a')
+            link.download = `ascii-art-${Date.now()}.png`
+            link.href = dataUrl
+            link.click()
+        },
+        exportWebM: (durationSeconds) => {
+            const canvas = canvasRef.current
+            if(!canvas) return
+
+            if (onRecordingStart) onRecordingStart()
+            
+            const stream = canvas.captureStream(60)
+            const recorder = new  MediaRecorder(stream, {mimeType: 'video/webm'})
+            const chunks = []
+
+            recorder.ondataavailable = (e) => {
+                if (e.data.size > 0) chunks.push(e.data)
+            }
+
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm'})
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.download = `ascii-loop-${Date.now()}.webm`
+                link.href = url
+                link.click()
+                URL.revokeObjectURL(url)
+                if (onRecordingEnd) onRecordingEnd()
+            }
+            recorder.start()
+
+            setTimeout(() => {
+                recorder.stop()
+            }, durationSeconds * 1000)
+        }
+    }))
 
     // Border 
     useGSAP(() => {
@@ -374,6 +417,7 @@ const AsciiCanvas = ({ effect, custom }) => {
             </section>
         </div>
     )
-}
+})
 
+AsciiCanvas.displayName = "AsciiCanvas"
 export default AsciiCanvas
