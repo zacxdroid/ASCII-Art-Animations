@@ -1,13 +1,22 @@
 import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 import ASCII_PRESETS from "../ascii/asciiPresets"
 
-const AsciiCanvas = ({ effect  }) => {
+const AsciiCanvas = ({ effect, custom }) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [isCustomMode, setIsCustomMode] = useState(false)
+
     const borderRef = useRef(null)
     const canvasRef = useRef(null)
+
+    // User set a custom Ascii
+    useEffect(() => {
+        if (custom) {
+            setIsCustomMode(true)
+        }
+    }, [custom])
 
     // Border 
     useGSAP(() => {
@@ -27,8 +36,10 @@ const AsciiCanvas = ({ effect  }) => {
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
         if(!ctx) return
-
-        const currentArt = ASCII_PRESETS[selectedIndex].art 
+        
+        const currentArt = (isCustomMode && custom)
+            ? custom.art
+            : ASCII_PRESETS[selectedIndex].art 
 
         const fontSize = 14
         ctx.font = `${fontSize}px monospace`
@@ -329,7 +340,7 @@ const AsciiCanvas = ({ effect  }) => {
             gsap.ticker.remove(render)
             gsap.killTweensOf(particles)
         }
-    }, {scope: canvasRef, dependencies: [selectedIndex, effect]})
+    }, {scope: canvasRef, dependencies: [selectedIndex, effect, custom, isCustomMode ]})
 
     return (
         <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">
@@ -339,10 +350,15 @@ const AsciiCanvas = ({ effect  }) => {
             <canvas ref={canvasRef} className="block pointer-events-none relative z-10" />
 
             <section className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20">
+                {custom && isCustomMode && (
+                    <button className="px-2 py-1 text-[10px] font-mono tracking-wider rounded border transition-all duration-500 select-none bg-white/15 text-white border-white/40 mb-2">
+                        {custom.name}
+                    </button>
+                )}
                 {ASCII_PRESETS.map((preset, index) => (
-                    <button key={preset.id} onClick={() => setSelectedIndex(index)}
+                    <button key={preset.id} onClick={() => {setSelectedIndex(index), setIsCustomMode(false)}}
                     className={`px-2 py-1 text-[10px] font-mono tracking-wider rounded border transition-all duration-500 select-none
-                    ${selectedIndex === index ? 'bg-white/15 text-white border-white/40'
+                    ${selectedIndex === index && !isCustomMode ? 'bg-white/15 text-white border-white/40'
                         : 'bg-[#121212]/60 text-[#777777] border-white/5 hover:bg-white/10 hover:text-white'
                     }`}>
                         {preset.name}

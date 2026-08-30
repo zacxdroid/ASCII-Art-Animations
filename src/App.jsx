@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { use, useState } from 'react'
 
 import AsciiCanvas from './components/AsciiCanvas'
 import Footer from './components/Footer'
@@ -13,11 +13,28 @@ import { EFFECT_CONFIGS } from './constants/effects'
 
 function App() {
   const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS[0])
+  const [customAscii, setCustomAscii] = useState(null)
 
   const handleSelectEffect = (effectId) => {
     const selected = EFFECT_CONFIGS.find((effect) => effect.id === effectId) || { id: effectId, color: '#72d07'}
     setCurrentEffect(selected)
   }
+
+  const handleSelectTxt = async (txtFile) => {
+    try {
+      const textContent = await txtFile.text()
+      
+      const customAsciiFile = {
+        id: `custom-${Date.now()}`,
+        name: 'user',
+        art: textContent
+      }
+      setCustomAscii(customAsciiFile)
+    } catch(error) {
+      console.error("Error reading the txt file: ", error)
+    }
+  }
+  
   return (
 
     <section className='relative w-full min-h-screen px-4 sm:px-8 md:px-12 flex justify-center items-center overflow-hidden flex-col'>
@@ -39,10 +56,10 @@ function App() {
       </header>
 
       <main className='w-full max-w-4xl'>
-        <AsciiCanvas effect={currentEffect}/>
+        <AsciiCanvas effect={currentEffect} custom={customAscii}/>
       </main>
 
-      <Footer onSelectEffect={handleSelectEffect}/>
+      <Footer onSelectEffect={handleSelectEffect} onUploadTxt={handleSelectTxt}/>
 
     </section>
 

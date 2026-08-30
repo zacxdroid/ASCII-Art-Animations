@@ -14,12 +14,20 @@ const Footer = ({ onSelectEffect, onUploadTxt, onUploadScript}) => {
 
   const handleTxtChange = (e) => {
     const file = e.target.files[0]
+    if (!file) return
+    if (file.type !== "text/plain") {
+      alert("Please, just upload .txt files")
+      return
+    }
     if (file && onUploadTxt) onUploadTxt(file)
+    e.target.value = null
   }
 
   const handleScriptChange = (e) => {
     const file = e.target.files[0]
+    if (!file) return
     if (file && onUploadScript) onUploadScript(file)
+    e.target.value = null
   }
   return(
     <footer className='w-full max-w-4xl grid grid-cols-[1fr_3fr] mt-2 bg-[#313131] border border-black overflow-hidden rounded-xl'>
