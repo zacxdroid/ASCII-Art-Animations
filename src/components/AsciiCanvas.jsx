@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "re
 
 import ASCII_PRESETS from "../ascii/asciiPresets"
 
-const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecordingEnd }, ref) => {
+const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecordingEnd, effectParams }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [isCustomMode, setIsCustomMode] = useState(false)
 
@@ -15,6 +15,8 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
     const effectColor = effect?.color
     const customArt = custom?.art
     const customName = custom?.name
+
+    const activeColor = effectParams?.color || effectColor
 
     // User set a custom Ascii
     useEffect(() => {
@@ -157,7 +159,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         x: p.originX + (dx > 0 ? 10 : -10),
                         y: p.originY + (dy > 0 ? 10 : -10),
                         scale: 1,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1,
                         repeat: -1,
                         yoyo: true,
@@ -169,7 +171,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         x: p.originX + Math.sin(p.originY * 0.05) * 40,
                         scale: () => 1 + Math.cos(p.originY * 0.05) * 0.5,
-                        color: effectColor,
+                        color: activeColor,
                         opacity: () => 0.5 + Math.cos(p.originY * 0.05) * 0.5,
                         duration: 1,
                         repeat: -1,
@@ -184,7 +186,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         scale: 2,
                         opacity: 1,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.4,
                         repeat: -1,
                         ease: "power2.out",
@@ -197,7 +199,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         x: p.originX + Math.cos(angle + Math.PI / 2) * 20,
                         y: p.originY + Math.sin(angle + Math.PI / 2) * 20,
                         scale: 1.3,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1.5,
                         repeat: -1,
                         yoyo: true,
@@ -213,7 +215,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         y: p.originY + dy * 0.6,
                         scale: 0.1,
                         opacity: 0,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1.5,
                         repeat: -1,
                         yoyo: true,
@@ -227,7 +229,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         scale: 1.8,
                         opacity: 1,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.8,
                         repeat: -1,
                         yoyo: true,
@@ -239,7 +241,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         y: p.originY - 12,
                         scale: 1.5,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -252,7 +254,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         x: () => p.originX + (Math.random() - 0.5) * 30,
                         y: () => p.originY + (Math.random() - 0.5) * 30,
                         scale: () => Math.random() * 1.5 + 0.5,
-                        color: effectColor,
+                        color: activeColor,
                         opacity: () => Math.random(),
                         duration: () => Math.random() * 2 + 1.5,
                         repeat: -1,
@@ -266,7 +268,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         x: () => p.originX + (Math.random() - 0.5) * 30,
                         y: () => p.originY + (Math.random() - 0.5) * 30,
                         scale: () => Math.random() * 1.5 + 0.5,
-                        color: effectColor,
+                        color: activeColor,
                         opacity: () => Math.random(),
                         duration: () => Math.random() * 2 + 1.5,
                         repeat: -1,
@@ -276,7 +278,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         x: p.originX + (Math.random() > 0.5 ? 10 : -10),
                         opacity: 0.1,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.4,
                         repeat: -1,
                         yoyo: true,
@@ -287,7 +289,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                 case 'heartbeat':
                     gsap.to(p, {
                         scale: 1.8,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.4,
                         repeat: -1,
                         yoyo: true,
@@ -301,7 +303,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         y: cy,
                         scale: 0.1,
                         opacity: 0,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 2,
                         repeat: -1,
                         yoyo: true,
@@ -314,7 +316,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         opacity: 1,
                         scale: 1.2,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.2,
                         repeat: -1,
                         yoyo: true,
@@ -328,7 +330,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         x: p.originX + (dx > 0 ? 25 : -25),
                         y: p.originY + (dy > 0 ? 15 : -15),
                         opacity: 0.4,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -341,7 +343,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         y: p.originY + Math.sin(p.originX * 0.015) * 35,
                         x: cx,
                         scale: 1.3,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 2.5,
                         repeat: -1,
                         yoyo: true,
@@ -353,7 +355,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                     gsap.to(p, {
                         scale: 1.6,
                         opacity: 0.3,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 1.2,
                         repeat: -1,
                         yoyo: true,
@@ -368,7 +370,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
                         y: p.originY + 40,
                         opacity: 1,
                         scale: 1.5,
-                        color: effectColor,
+                        color: activeColor,
                         duration: 0.6,
                         repeat: -1,
                         ease: "power1.in",
@@ -402,7 +404,7 @@ const AsciiCanvas = forwardRef (({ effect, custom, onRecordingStart, onRecording
         return () => {
             gsap.ticker.remove(render)
         }
-    }, {scope: canvasRef, dependencies: [selectedIndex, effectId, effectColor, customArt, isCustomMode ]})
+    }, {scope: canvasRef, dependencies: [selectedIndex, effectId, activeColor, customArt, isCustomMode, effectParams ]})
 
     return (
         <div className="relative flex justify-center items-center p-4 sm:p-8 rounded-2xl overflow-hidden">

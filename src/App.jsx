@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 
 import AsciiCanvas from './components/AsciiCanvas'
 import Footer from './components/Footer'
+import ThemeSelector from './components/ThemeSelector'
 
 import patternLeft from './assets/images/pattern-left.png'
 import patternRight from './assets/images/pattern-right.png'
@@ -14,10 +15,12 @@ import { EFFECT_CONFIGS } from './constants/effects'
 function App() {
   const [currentEffect, setCurrentEffect] = useState(EFFECT_CONFIGS[0])
   const [customAscii, setCustomAscii] = useState(null)
+  const [effectParams, setEffectParams] = useState({
+    color: null,
+  })
 
   const canvasRef = useRef(null)
   const [isRecording, setIsRecording] = useState(false)
-
 
   const handleSelectEffect = (effectId) => {
     const selected = EFFECT_CONFIGS.find((effect) => effect.id === effectId) || { id: effectId, color: '#72d07'}
@@ -80,6 +83,7 @@ function App() {
         <AsciiCanvas 
           effect={currentEffect} 
           custom={customAscii}
+          effectParams={effectParams}
           ref={canvasRef}
           onRecordingStart = {() => setIsRecording(true)}
           onRecordingEnd = {() => setIsRecording(false)}/>
@@ -92,6 +96,7 @@ function App() {
         onExportWebM = {handleExportWebM}
         isRecording ={isRecording}/>
 
+      <ThemeSelector effectParams={effectParams} setEffectParams={setEffectParams}/>
     </section>
 
 
